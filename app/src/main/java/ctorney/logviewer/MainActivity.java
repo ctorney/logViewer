@@ -37,6 +37,7 @@ import dji.sdk.Camera.DJICameraSettingsDef.CameraShootPhotoMode;
 import android.os.Bundle;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -159,7 +160,6 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         IntentFilter filter = new IntentFilter();
         filter.addAction(djiConnector.FLAG_CONNECTION_CHANGE);
         registerReceiver(mReceiver, filter);
-
     }
 
     protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -582,9 +582,14 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 Date today = Calendar.getInstance().getTime();
 
                 String todayDate = df.format(today);
-                //File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/osmoLog/" + todayDate + ".txt");
-                File file = new File("/mnt/shared/osmoLogs/" + todayDate + "ohyeah.txt");
+                String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/osmoLog/" + todayDate + ".txt";
+                showToast(filename);
 
+                File file = new File(filename);
+                file.setReadable(true, false);
+                file.setExecutable(true, false);
+                file.setWritable(true, false);
+                //File file = new File("/mnt/shared/osmoLogs/" + todayDate + ".txt");
                 if (!file.exists()) {
                     try {
 
@@ -609,7 +614,18 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 bw.write(outputText);
                 bw.close();
 
+                try{
+                    Process su = Runtime.getRuntime().exec("rm /mnt/shared/osmoLogs/" + todayDate + ".txt");
+                    su.waitFor();
+                    su = Runtime.getRuntime().exec("cp " + filename + " /mnt/shared/osmoLogs/" + todayDate + ".txt");
+                    su.waitFor();
 
+                }catch(IOException e){
+                    throw new Exception(e);
+                }
+                catch(InterruptedException e){
+                    throw new Exception(e);
+                }
 
 
 

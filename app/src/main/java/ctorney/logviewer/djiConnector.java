@@ -76,7 +76,7 @@ public class djiConnector extends Application{
         //Listens to the SDK registration result
         @Override
         public void onGetRegisteredResult(DJIError error) {
-           // if(error == DJISDKError.REGISTRATION_SUCCESS) {
+            if(error == DJISDKError.REGISTRATION_SUCCESS) {
                 DJISDKManager.getInstance().startConnectionToProduct();
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
@@ -85,17 +85,17 @@ public class djiConnector extends Application{
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                     }
                 });
-           // } //else {
-               // Handler handler = new Handler(Looper.getMainLooper());
-                //handler.post(new Runnable() {
+            } else {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
 
-                  //  @Override
-                   // public void run() {
-                    //    Toast.makeText(getApplicationContext(), "register sdk fails, check network is available", Toast.LENGTH_LONG).show();
-                    //}
-               // });
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "register sdk fails, check network is available", Toast.LENGTH_LONG).show();
+                    }
+                });
 
-            //}
+            }
             Log.e("TAG", error.toString());
         }
 
