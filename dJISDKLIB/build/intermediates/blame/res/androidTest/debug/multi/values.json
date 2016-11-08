@@ -3731,9 +3731,8 @@
                     "startLine": 200,
                     "startColumn": 4,
                     "startOffset": 24378,
-                    "endLine": 206,
-                    "endColumn": 12,
-                    "endOffset": 24664
+                    "endColumn": 48,
+                    "endOffset": 24422
                 },
                 "from": {
                     "file": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/values/values.xml",
@@ -3741,72 +3740,92 @@
                         "startLine": 200,
                         "startColumn": 4,
                         "startOffset": 24378,
-                        "endLine": 206,
-                        "endColumn": 12,
-                        "endOffset": 24664
+                        "endColumn": 48,
+                        "endOffset": 24422
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 207,
+                    "startLine": 201,
                     "startColumn": 4,
-                    "startOffset": 24669,
-                    "endLine": 209,
+                    "startOffset": 24427,
+                    "endLine": 207,
                     "endColumn": 12,
-                    "endOffset": 24824
+                    "endOffset": 24713
                 },
                 "from": {
                     "file": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/values/values.xml",
                     "position": {
-                        "startLine": 207,
+                        "startLine": 201,
                         "startColumn": 4,
-                        "startOffset": 24669,
-                        "endLine": 209,
+                        "startOffset": 24427,
+                        "endLine": 207,
                         "endColumn": 12,
-                        "endOffset": 24824
+                        "endOffset": 24713
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 210,
+                    "startLine": 208,
                     "startColumn": 4,
-                    "startOffset": 24829,
-                    "endLine": 212,
+                    "startOffset": 24718,
+                    "endLine": 210,
                     "endColumn": 12,
-                    "endOffset": 24953
+                    "endOffset": 24873
                 },
                 "from": {
                     "file": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/values/values.xml",
                     "position": {
-                        "startLine": 210,
+                        "startLine": 208,
                         "startColumn": 4,
-                        "startOffset": 24829,
-                        "endLine": 212,
+                        "startOffset": 24718,
+                        "endLine": 210,
                         "endColumn": 12,
-                        "endOffset": 24953
+                        "endOffset": 24873
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 213,
+                    "startLine": 211,
                     "startColumn": 4,
-                    "startOffset": 24958,
-                    "endLine": 220,
+                    "startOffset": 24878,
+                    "endLine": 213,
                     "endColumn": 12,
-                    "endOffset": 25398
+                    "endOffset": 25002
                 },
                 "from": {
                     "file": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/values/values.xml",
                     "position": {
-                        "startLine": 213,
+                        "startLine": 211,
                         "startColumn": 4,
-                        "startOffset": 24958,
-                        "endLine": 220,
+                        "startOffset": 24878,
+                        "endLine": 213,
                         "endColumn": 12,
-                        "endOffset": 25398
+                        "endOffset": 25002
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 214,
+                    "startColumn": 4,
+                    "startOffset": 25007,
+                    "endLine": 221,
+                    "endColumn": 12,
+                    "endOffset": 25447
+                },
+                "from": {
+                    "file": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 214,
+                        "startColumn": 4,
+                        "startOffset": 25007,
+                        "endLine": 221,
+                        "endColumn": 12,
+                        "endOffset": 25447
                     }
                 }
             }

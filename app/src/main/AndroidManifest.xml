@@ -36,7 +36,7 @@
     <uses-library android:name="com.android.future.usb.accessory" />
     <meta-data
         android:name="com.dji.sdk.API_KEY"
-        android:value="00e3054c41f125a91ff0b708" />
+        android:value="1f37cd2200734eb8c5e94bd2" />
     <activity
         android:name="dji.sdk.SDKManager.DJIAoaControllerActivity"
         android:theme="@android:style/Theme.Translucent" >

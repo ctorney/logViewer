@@ -7,18 +7,19 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import dji.sdk.Battery.DJIBattery;
-import dji.sdk.Camera.DJICamera;
-import dji.sdk.Products.DJIAircraft;
-import dji.sdk.Products.DJIHandHeld;
-import dji.sdk.SDKManager.DJISDKManager;
+import dji.common.battery.DJIBatteryState;
+import dji.sdk.battery.DJIBattery;
+import dji.sdk.camera.DJICamera;
+import dji.sdk.products.DJIAircraft;
+import dji.sdk.products.DJIHandHeld;
+import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseComponent.DJIComponentListener;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.base.DJIBaseProduct.DJIBaseProductListener;
 import dji.sdk.base.DJIBaseProduct.DJIComponentKey;
-import dji.sdk.base.DJIError;
-import dji.sdk.base.DJISDKError;
+import dji.common.error.DJIError;
+import dji.common.error.DJISDKError;
 
 public class djiConnector extends Application{
 
@@ -65,6 +66,7 @@ public class djiConnector extends Application{
         mHandler = new Handler(Looper.getMainLooper());
         //This is used to start SDK services and initiate SDK.
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
+
     }
 
     /**
@@ -86,6 +88,8 @@ public class djiConnector extends Application{
                     }
                 });
             } else {
+                Toast.makeText(getApplicationContext(), error.getDescription(), Toast.LENGTH_LONG).show();
+
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
 
@@ -110,7 +114,7 @@ public class djiConnector extends Application{
                     mProduct.getBattery().setBatteryStateUpdateCallback(
                             new DJIBattery.DJIBatteryStateUpdateCallback() {
                                 @Override
-                                public void onResult(DJIBattery.DJIBatteryState djiBatteryState) {
+                                public void onResult(DJIBatteryState djiBatteryState) {
 
                                     mBatteryPercent = djiBatteryState.getBatteryEnergyRemainingPercent();
                                     //mConnectStatusTextView.setText(djiConnector.getProductInstance().getModel() + " " +	String.valueOf(mBatteryPercent));

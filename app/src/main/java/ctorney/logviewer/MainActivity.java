@@ -23,17 +23,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import dji.sdk.Battery.DJIBattery;
-import dji.sdk.Camera.DJICamera;
-import dji.sdk.Camera.DJICamera.CameraReceivedVideoDataCallback;
-import dji.sdk.Codec.DJICodecManager;
-import dji.sdk.Products.DJIAircraft;
-import dji.sdk.base.DJIBaseComponent.DJICompletionCallback;
+import dji.common.camera.CameraSystemState;
+import dji.common.gimbal.DJIGimbalAttitude;
+import dji.common.gimbal.DJIGimbalRotateDirection;
+import dji.common.gimbal.DJIGimbalSpeedRotation;
+import dji.common.gimbal.DJIGimbalWorkMode;
+import dji.common.util.DJICommonCallbacks;
+import dji.sdk.battery.DJIBattery;
+import dji.sdk.camera.DJICamera;
+import dji.sdk.camera.DJICamera.CameraReceivedVideoDataCallback;
+import dji.sdk.codec.DJICodecManager;
+import dji.sdk.products.DJIAircraft;
+//import dji.sdk.base.DJIBaseComponent. .DJICompletionCallback;
 import dji.sdk.base.DJIBaseProduct;
-import dji.sdk.base.DJIBaseProduct.Model;
-import dji.sdk.base.DJIError;
-import dji.sdk.Camera.DJICameraSettingsDef.CameraMode;
-import dji.sdk.Camera.DJICameraSettingsDef.CameraShootPhotoMode;
+import dji.common.error.DJIError;
+import dji.common.camera.DJICameraSettingsDef.CameraMode;
+import dji.common.camera.DJICameraSettingsDef.CameraShootPhotoMode;
 import android.os.Bundle;
 
 import java.io.BufferedWriter;
@@ -52,13 +57,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.io.FileWriter;
 
-import dji.sdk.Camera.DJICameraSettingsDef;
-import dji.sdk.Camera.DJIMedia;
+import dji.common.camera.DJICameraSettingsDef;
+import dji.sdk.camera.DJIMedia;
 import dji.sdk.base.DJIBaseComponent;
 
 
-import dji.sdk.Gimbal.DJIGimbal;
-
+import dji.sdk.gimbal.DJIGimbal;
+import dji.sdk.products.DJIHandHeld;
 
 public class MainActivity extends Activity implements TextureView.SurfaceTextureListener,OnClickListener{
 
@@ -82,9 +87,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
     private boolean recording = false;
 
-    private DJIGimbal.DJIGimbalSpeedRotation mPitchSpeedRotation;
-    private DJIGimbal.DJIGimbalSpeedRotation mYawSpeedRotation;
-
+    private DJIGimbalSpeedRotation mPitchSpeedRotation;
+    private DJIGimbalSpeedRotation mYawSpeedRotation;
 
 
     private Timer mTimer;
@@ -106,7 +110,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                             Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
                             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.SYSTEM_ALERT_WINDOW,
-//                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.READ_PHONE_STATE,
                     }
                     , 1);
         }
@@ -122,7 +126,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         if (camera != null) {
             camera.setDJICameraUpdatedSystemStateCallback(new DJICamera.CameraUpdatedSystemStateCallback() {
                 @Override
-                public void onResult(DJICamera.CameraSystemState cameraSystemState) {
+                public void onResult(CameraSystemState cameraSystemState) {
                     if (null != cameraSystemState) {
 
                         int recordTime = cameraSystemState.getCurrentVideoRecordingTimeInSeconds();
@@ -307,8 +311,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
         try {
             DJIBaseProduct product = djiConnector.getProductInstance();
-
-            if (product.getModel() != DJIBaseProduct.Model.UnknownAircraft) {
+            if (product instanceof DJIHandHeld) {
                 product.getCamera().setDJICameraReceivedVideoDataCallback(mReceivedVideoDataCallback);
 
             }
@@ -398,14 +401,14 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             else
             {
                 mTimer = new Timer();
-                mPitchSpeedRotation = new DJIGimbal.DJIGimbalSpeedRotation(5,
-                        DJIGimbal.DJIGimbalRotateDirection.Clockwise);
+                mPitchSpeedRotation = new DJIGimbalSpeedRotation(5,
+                        DJIGimbalRotateDirection.Clockwise);
                 mGimbalRotationTimerTask = new GimbalRotateTimerTask(mPitchSpeedRotation,null,null);
                 mTimer.schedule(mGimbalRotationTimerTask, 0, 100);
             }
             DJIGimbal gimbal = djiConnector.getProductInstance().getGimbal();
             if (gimbal!=null) {
-                gimbal.setGimbalWorkMode(DJIGimbal.DJIGimbalWorkMode.FreeMode, new DJIBaseComponent.DJICompletionCallback() {
+                gimbal.setGimbalWorkMode(DJIGimbalWorkMode.FreeMode, new DJICommonCallbacks.DJICompletionCallback() {
                     @Override
                     public void onResult(DJIError error) {
                     }
@@ -428,14 +431,14 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             else
             {
                 mTimer = new Timer();
-                mPitchSpeedRotation = new DJIGimbal.DJIGimbalSpeedRotation(5,
-                        DJIGimbal.DJIGimbalRotateDirection.CounterClockwise);
+                mPitchSpeedRotation = new DJIGimbalSpeedRotation(5,
+                        DJIGimbalRotateDirection.CounterClockwise);
                 mGimbalRotationTimerTask = new GimbalRotateTimerTask(mPitchSpeedRotation,null,null);
                 mTimer.schedule(mGimbalRotationTimerTask, 0, 100);
             }
             DJIGimbal gimbal = djiConnector.getProductInstance().getGimbal();
             if (gimbal!=null) {
-                gimbal.setGimbalWorkMode(DJIGimbal.DJIGimbalWorkMode.FreeMode, new DJIBaseComponent.DJICompletionCallback() {
+                gimbal.setGimbalWorkMode(DJIGimbalWorkMode.FreeMode, new DJICommonCallbacks.DJICompletionCallback() {
                     @Override
                     public void onResult(DJIError error) { }
                 });
@@ -457,13 +460,13 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             else
             {
                 mTimer = new Timer();
-                mYawSpeedRotation = new DJIGimbal.DJIGimbalSpeedRotation(5,DJIGimbal.DJIGimbalRotateDirection.CounterClockwise);
+                mYawSpeedRotation = new DJIGimbalSpeedRotation(5,DJIGimbalRotateDirection.CounterClockwise);
                 mGimbalRotationTimerTask = new GimbalRotateTimerTask(null,null,mYawSpeedRotation);
                 mTimer.schedule(mGimbalRotationTimerTask, 0, 100);
             }
             DJIGimbal gimbal = djiConnector.getProductInstance().getGimbal();
             if (gimbal!=null) {
-                gimbal.setGimbalWorkMode(DJIGimbal.DJIGimbalWorkMode.FreeMode, new DJIBaseComponent.DJICompletionCallback() {
+                gimbal.setGimbalWorkMode(DJIGimbalWorkMode.FreeMode, new DJICommonCallbacks.DJICompletionCallback() {
                     @Override
                     public void onResult(DJIError error) {
                     }
@@ -488,8 +491,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             else
             {
                 mTimer = new Timer();
-                mYawSpeedRotation = new DJIGimbal.DJIGimbalSpeedRotation(5,
-                        DJIGimbal.DJIGimbalRotateDirection.Clockwise);
+                mYawSpeedRotation = new DJIGimbalSpeedRotation(5,
+                        DJIGimbalRotateDirection.Clockwise);
                 mGimbalRotationTimerTask = new GimbalRotateTimerTask(null,null,mYawSpeedRotation);
                 //mGimbalRotationTimerTask.run();
                 mTimer.schedule(mGimbalRotationTimerTask, 0, 100);
@@ -497,7 +500,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
             DJIGimbal gimbal = djiConnector.getProductInstance().getGimbal();
             if (gimbal!=null) {
-                gimbal.setGimbalWorkMode(DJIGimbal.DJIGimbalWorkMode.FreeMode, new DJIBaseComponent.DJICompletionCallback() {
+                gimbal.setGimbalWorkMode(DJIGimbalWorkMode.FreeMode, new DJICommonCallbacks.DJICompletionCallback() {
                     @Override
                     public void onResult(DJIError error) {
                     }
@@ -513,14 +516,15 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
         DJICamera camera = djiConnector.getCameraInstance();
         if (camera != null) {
-            camera.setCameraMode(cameraMode, new DJICompletionCallback() {
+
+            camera.setCameraMode(cameraMode, new DJICommonCallbacks.DJICompletionCallback() {
                 @Override
                 public void onResult(DJIError error) {
 
                     if (error == null) {
-                        showToast("Switch Camera Mode Succeeded");
+ //                       showToast("Switch Camera Mode Succeeded");
                     } else {
-                        showToast(error.getDescription());
+   //                     showToast(error.getDescription());
                     }
                 }
             });
@@ -534,9 +538,12 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     private void startRecord(){
 
         CameraMode cameraMode = CameraMode.RecordVideo;
+
         final DJICamera camera = djiConnector.getCameraInstance();
+
+
         if (camera != null) {
-            camera.startRecordVideo(new DJICompletionCallback(){
+            camera.startRecordVideo(new DJICommonCallbacks.DJICompletionCallback(){
                 @Override
                 public void onResult(DJIError error)
                 {
@@ -557,7 +564,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
         DJICamera camera = djiConnector.getCameraInstance();
         if (camera != null) {
-            camera.stopRecordVideo(new DJICompletionCallback(){
+            camera.stopRecordVideo(new DJICommonCallbacks.DJICompletionCallback(){
 
                 @Override
                 public void onResult(DJIError error)
@@ -582,8 +589,11 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 Date today = Calendar.getInstance().getTime();
 
                 String todayDate = df.format(today);
-                String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/osmoLog/" + todayDate + ".txt";
-                showToast(filename);
+
+                //String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/osmoLog/" + todayDate + ".txt";
+
+                String filename = "/sdcard/osmoLog/" + todayDate + ".txt";
+                //showToast(filename);
 
                 File file = new File(filename);
                 file.setReadable(true, false);
@@ -604,7 +614,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 SimpleDateFormat dfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String nowTime = dfTime.format(today);
 
-                DJIGimbal.DJIGimbalAttitude djiAttitude;
+                DJIGimbalAttitude djiAttitude;
                 djiAttitude = djiConnector.getProductInstance().getGimbal().getAttitudeInDegrees();
 
                 String outputText = nowTime + " " + String.valueOf(djiAttitude.pitch) + "\n" ;
@@ -640,11 +650,11 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
 
     class GimbalRotateTimerTask extends TimerTask {
-        DJIGimbal.DJIGimbalSpeedRotation mPitch;
-        DJIGimbal.DJIGimbalSpeedRotation mRoll;
-        DJIGimbal.DJIGimbalSpeedRotation mYaw;
+        DJIGimbalSpeedRotation mPitch;
+        DJIGimbalSpeedRotation mRoll;
+        DJIGimbalSpeedRotation mYaw;
 
-        GimbalRotateTimerTask(DJIGimbal.DJIGimbalSpeedRotation pitch, DJIGimbal.DJIGimbalSpeedRotation roll, DJIGimbal.DJIGimbalSpeedRotation yaw) {
+        GimbalRotateTimerTask(DJIGimbalSpeedRotation pitch, DJIGimbalSpeedRotation roll, DJIGimbalSpeedRotation yaw) {
             super();
             this.mPitch = pitch;
             this.mRoll = roll;
@@ -656,7 +666,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             if (gimbal!=null) {
 
                 gimbal.rotateGimbalBySpeed(mPitch, mRoll, mYaw,
-                        new DJIBaseComponent.DJICompletionCallback() {
+                        new DJICommonCallbacks.DJICompletionCallback() {
 
                             @Override
                             public void onResult(DJIError error) {
@@ -667,4 +677,6 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         }
 
     }
+
+
 }

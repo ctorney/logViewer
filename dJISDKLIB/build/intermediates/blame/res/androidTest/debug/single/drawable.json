@@ -16,6 +16,10 @@
         "source": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/drawable/btn_lock_selector.xml"
     },
     {
+        "merged": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/drawable/ic_launcher.png",
+        "source": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/drawable/ic_launcher.png"
+    },
+    {
         "merged": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/drawable/btn_radio_selector.xml",
         "source": "/home/ctorney/workspace/logViewer/dJISDKLIB/build/intermediates/bundles/debug/res/drawable/btn_radio_selector.xml"
     }
